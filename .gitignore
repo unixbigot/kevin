@@ -1,0 +1,7 @@
+*~
+*.dpkg-old
+grains
+master
+minion
+minion_id
+proxy
