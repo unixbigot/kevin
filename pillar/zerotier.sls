@@ -16,7 +16,7 @@ zerotier:
   apt_repo_path: https://download.zerotier.com/{{grains.os_family|lower}}/{{grains.lsb_distrib_codename}}
   dist_codename: {{grains.lsb_distrib_codename}}
   {% elif grains['os_family'] == 'Debian' and grains['osarch'] == 'armhf' %}
-  apt_repo_path: https://download.zerotier.com/debian/jessie jessie main
+  apt_repo_path: http://download.zerotier.com/debian/jessie
   dist_codename: jessie
   {%endif%}
   #
