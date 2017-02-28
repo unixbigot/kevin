@@ -36,3 +36,8 @@ You should designate a "bootstrap server" that can initialise new devices
 
 Each machine under management must run the SaltStack "minion" process.
 SaltStack supports Mac, Linux and Windows.
+
+## FAQ
+
+* Q: Why 'kevin'?
+  * A: https://www.youtube.com/watch?v=I3Rw8b90INk
