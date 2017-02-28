@@ -1,0 +1,13 @@
+#
+# This Saltfile overrides the config for the Saltstack
+# tools to run out of local configuration instead of /etc/salt and /srv/salt
+#
+
+salt-ssh:
+  config_dir: etc
+  ssh_max_procs: 30
+  ssh_wipe: True
+  log_file: log/salt/master
+  ssh_log_file: log/salt/ssh
+  cachedir: cache/salt/master
+  pki_dir: etc/pki

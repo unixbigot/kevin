@@ -1,3 +1,9 @@
 *~
 #*#
-salt/base/src/distfiles/*z
+*.dpkg-old
+etc/grains
+etc/master
+etc/minion
+etc/minion_id
+etc/proxy
+srv/salt/base/src/distfiles/*z

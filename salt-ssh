@@ -1,0 +1,3 @@
+#!/bin/bash
+[ -f etc/master.d/salt-ssh.conf ] || echo "root_dir: `pwd`" >etc/master.d/salt-ssh.conf
+salt-ssh "$@"
