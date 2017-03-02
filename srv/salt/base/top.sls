@@ -16,4 +16,9 @@ base:
     - match: grain
     - dev.golang
     - dev.nodejs
+  roles:provisioning:
+    - match: grain
+    - salt.master
+    - salt.syndic
+    - salt.provisioning_server
 

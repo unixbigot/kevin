@@ -1,0 +1,9 @@
+#
+# Roster file used with provision.sh and salt-ssh to install salt-minion on a bare Raspbian system
+#
+target:
+  host: 192.168.0.1
+  user: pi
+  passwd: raspberry
+  sudo: True
+
