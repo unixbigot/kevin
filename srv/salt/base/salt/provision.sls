@@ -73,6 +73,7 @@ provision-user:
     - name: {{pillar.salt_provision.user}}
     - gid_from_name: true
     - home: /home/{{pillar.salt_provision.user}}
+    - shell: /bin/bash
 
 
 ssh_config:

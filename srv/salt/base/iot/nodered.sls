@@ -25,6 +25,7 @@ nodered-user:
     - name: nodered
     - gid_from_name: true
     - home: /home/nodered
+    - shell: /bin/bash
   
 iot-nodered-service:
   file.managed:
