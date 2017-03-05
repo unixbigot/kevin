@@ -1,3 +1,13 @@
+pkg-depends:
+  # Armbian ships without python-apt, which cannot 
+  # be installed with salt's pkg module, which needs it.
+  cmd.run:
+    - name: apt install -y python-apt
+    - unless: dpkg -l | grep "python-apt "
+
+# 
+# Install and configure the salt "minion" service
+#
 salt-minion:
   pkgrepo.managed:
     - humanname: SaltStack Repo

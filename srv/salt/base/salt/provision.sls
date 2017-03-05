@@ -2,6 +2,7 @@ dnsmasq:
   pkg.installed:
     - pkgs:
       - dnsmasq
+      - iptables
   service.running:
     - enable: True
     - listen:
@@ -10,19 +11,26 @@ dnsmasq:
 
 /etc/network/interfaces:
   file.comment:
-    - regex: ^iface eth0
+    - regex: ^(iface|allow-hotplug|no-auto-down) {{pillar.salt_provision.interface}}
+
+parse-interfaces-dir:
+  file.append:
+    - name: /etc/network/interfaces
+    - text:
+      - ""
+      - source-directory /etc/network/interfaces.d
 
 /etc/network/interfaces.d/{{pillar.salt_provision.interface}}:
   file.managed:
-    - source: salt://salt/provision_interface.conf
     - makedirs: True
     - template: jinja
-    - context:
-      interface: {{pillar.salt_provision.interface}}
-      address: {{pillar.salt_provision.address}}
-      netmask: {{pillar.salt_provision.netmask}}
+    - contents:
+      - allow-hotplug {{pillar.salt_provision.interface}}
+      - iface {{pillar.salt_provision.interface}} inet static
+      - "  address {{pillar.salt_provision.address}}"
+      - "  netmask {{pillar.salt_provision.netmask}}"
   cmd.run:
-    - name: ifdown {{pillar.bootstrap.interface}} && ifup {{pillar.bootstrap.interface}}
+    - name: ifdown {{pillar.salt_provision.interface}} && ifup {{pillar.salt_provision.interface}}
     - onchanges:
       - file: /etc/network/interfaces
       - file: /etc/network/interfaces.d/{{pillar.salt_provision.interface}}
@@ -44,15 +52,13 @@ ip_masquerading:
 
 /etc/network/hosts-{{pillar.salt_provision.interface}}:
   file.managed:
-    - source: salt://salt/provision_hosts.conf
     - template: jinja
     - contents:
       - {{pillar.salt_provision.address}} salt
-      - {{target}} target
+      - {{pillar.salt_provision.target}} target
 
 /etc/dnsmasq.d/{{pillar.salt_provision.interface}}:
   file.managed:
-    - source: salt://salt/provision_dnsmasq.conf
     - template: jinja
     - contents:
       - interface={{pillar.salt_provision.interface}}
@@ -60,49 +66,62 @@ ip_masquerading:
       - no-hosts
       - addn-hosts=/etc/network/hosts-{{pillar.salt_provision.interface}}
 
+provision-user:
+  group.present:
+    - name: {{pillar.salt_provision.user}}
+  user.present:
+    - name: {{pillar.salt_provision.user}}
+    - gid_from_name: true
+    - home: /home/{{pillar.salt_provision.user}}
+
+
 ssh_config:
   file.managed:
-    - name: /home/pi/.ssh/config
-    - user: pi
-    - group: pi
+    - name: /home/{{pillar.salt_provision.user}}/.ssh/config
+    - user: {{pillar.salt_provision.user}}
+    - group: {{pillar.salt_provision.user}}
     - mode: 600
     - makedirs: True
     - contents:
       - Host: target
-      - "  User: pi"
+      - "  User: {{pillar.salt_provision.target_user}}"
 
 provision_ssh_id:
   file.managed:
-    - name: /home/pi/.ssh/id_provision
-    - user: pi
-    - group: pi
+    - name: /home/{{pillar.salt_provision.user}}/.ssh/id_provision
+    - user: {{pillar.salt_provision.user}}
+    - group: {{pillar.salt_provision.user}}
     - mode: 600
     - makedirs: True
-    - contents:
-      - {{pillar.salt_provision.ssh_secret_key}}
+    - source: {{pillar.salt_provision.ssh_secret_key}}
 
 provision_ssh_pub:
   file.managed:
-    - name: /home/pi/.ssh/id_provision.pub
-    - user: pi
-    - group: pi
+    - name: /home/{{pillar.salt_provision.user}}/.ssh/id_provision.pub
+    - user: {{pillar.salt_provision.user}}
+    - group: {{pillar.salt_provision.user}}
     - mode: 644
     - makedirs: True
-    - contents:
-      - {{pillar.salt_provision.ssh_public_key}}
+    - source: {{pillar.salt_provision.ssh_public_key}}
 
 salt_provision_repo:
   git.latest:
     - name: {{pillar.salt_provision.repo}}
-    - target: /home/pi/salt
+    - target: /home/{{pillar.salt_provision.user}}/salt
+    - user: {{pillar.salt_provision.user}}
+    #- identity: {{pillar.salt_provision.git_secret_key}}
     - submodules: True
-    - identity: {{pillar.salt_provision.git_secret_key}}
-    - user: pi
+
+salt_provision_remove_srv:
+  file.absent:
+    - name: /srv
 
 salt_provision_symlink:
   file.symlink:
     - name: /srv
-    - target: /home/pi/salt/srv
+    - target: /home/{{pillar.salt_provision.user}}/salt/srv
+    - require:
+      - salt_provision_remove_srv
 
 salt_provision_conf:
   file.managed:

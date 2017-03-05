@@ -4,5 +4,5 @@ base:
     - package-versions
   'os_family:Debian':
     - match: grain
-    - salt-minion
+    - salt
     - zerotier

@@ -1,10 +1,11 @@
 #
 # Set the location of your top level salt master here.
 #
-# Mine is a Raspberry Pi called "Tweety"
+# Mine is a Raspberry Pi called "Tweety", but I
+# have a DNS alias "salt.lan" for it.
 #
 salt_syndic:
-  master_host: tweety.local
+  master_host: salt.lan
 
 #
 # Define the location of official saltstack packages.
@@ -17,7 +18,7 @@ salt_syndic:
 # most appropriate package for supported distributions.
 # 
 salt_minion:
-  master_host: tweety.local
+  master_host: salt.lan
 {% if grains['os'] == 'Ubuntu' and grains['osarch'] == 'amd64' %}
   apt_repo_path: http://repo.saltstack.com/apt/ubuntu/16.04/amd64/latest
   dist_codename: xenial
@@ -30,15 +31,24 @@ salt_minion:
 # Set up provisining server config
 #
 salt_provision:
-  public_interface: wlan0
+  user: provision
+  target_user: pi
   interface: eth0
+{% if grains.id == 'pickaxe' %}
+  public_interface: wlx7cdd9017ca36
+{% else %}
+  public_interface: wlan0
+{% endif %}
   repo: https://github.com/unixbigot/kevin.git
-  ssh_secret_key: PASTE_HERE_id_provision
-  ssh_public_key: PASTE_HERE_id_provision.pub
-  git_secret_key: PASTE_HERE_id_github
+  ssh_secret_key: salt://credentials/id_provision
+  ssh_public_key: salt://credentials/id_provision.pub
+  git_secret_key: salt://credentials/id_github
+  git_public_key: salt://credentials/id_github.pub
   address:       192.168.0.1
   netmask:       255.255.255.0
   dhcp_start:    192.168.0.100
   dhcp_end:      192.168.0.100
   dhcp_lease:    5m
   target:        192.168.0.100
+
+  
