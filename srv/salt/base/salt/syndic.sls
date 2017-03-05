@@ -14,6 +14,7 @@ salt-syndic:
     - replace: False
     - contents:
       - syndic_master: {{pillar.salt_syndic.master_host}}
+      - worker_threads: 3
   service.running:
     - enable: True
     - watch:

@@ -21,8 +21,9 @@ salt-minion:
       - pkgrepo: salt-minion
   file.managed:
     - name: /etc/salt/minion.d/local.conf
-    - source: salt://salt/minion-local.conf
     - replace: False
+    - contents:
+      - hash_type: sha256
   service.running:
     - enable: True
     - watch:
@@ -31,7 +32,8 @@ salt-minion:
 salt-grains:
   file.managed:
     - name: /etc/salt/grains
-    - source: salt://salt/minion-grains.conf
     - replace: False
+    - contents:
+      - roles: []
 
   

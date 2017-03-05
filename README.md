@@ -37,6 +37,78 @@ You should designate a "bootstrap server" that can initialise new devices
 Each machine under management must run the SaltStack "minion" process.
 SaltStack supports Mac, Linux and Windows.
 
+## Usage
+
+### Creating your salt master
+
+```
+git clone https://github.com/unixbigot/kevin.git
+cd kevin
+cp etc/roster.example etc/roster
+vi etc/roster # (or use nano) - add your host, say 'alice'
+./salt-ssh alice state.apply salt.master
+rsync -av srv/ alice:/srv
+```
+
+### Installing salt minion on an existing system
+
+```
+cd kevin
+cp etc/roster.example etc/roster
+vi etc/roster # (or use nano) - add your minion host, say 'bob'
+# Test that you can connect to bob
+./salt-ssh -i bob test.ping
+# Now we apply a state to bob
+./salt-ssh bob state.apply salt.minion
+# Next, on your master system do 'sudo salt-key -a bob'
+```
+
+### Making a provisioning station
+
+You are creating a system that will be used to configure new devices
+without needing to connect a screen or keyboard to the target system.
+
+For the provisioning station, you will need a computer with at least
+one wired interface (say a Raspberry Pi with wired eth0 and wireless
+wlan0, or a laptop with wired ethernet).
+
+We will use the provisioning station's wired interface to connect to
+the target system, and we will interact with the provisioning station
+either via keyboard and screen, or by logging into it via another
+network interface.
+
+If you have already made carol a minion, do this on the master:
+
+```
+sudo vi /srv/pillar/salt.sls # customise the salt_provision section if neeeded
+sudo salt carol grains.append roles provisioning
+sudo salt carol state.apply
+```
+
+If carol is not a minion, you can use salt-ssh, but salt-ssh does not support persistent grains, so you must apply the roles individually:
+
+```
+cd kevin
+vi srv/pillar/salt.sls # customise the salt_provision section if neeeded
+./salt-ssh -i carol test.ping
+for s in master syndic provision ; do ./salt-ssh carol state.apply salt.$s ; done
+```
+
+### Using your provisioning server
+
+ 1. Connect the target system to the provisioning station using an ethernet cable 
+ 2. Prepare the target system by booting it from an OS image that has DHCP enabled
+ 3. On the provisioning station run `cd kevin && ./provision.sh`
+
+This will do the following:
+
+ 1. Install salt-minion on the target, with the provisioning station as master
+ 2. Auto accept the minion's key
+ 3. Wait for the minion to successfully connect
+ 4. Set grains.roles to the desired target system roles
+ 5. Run a "highstate" operation on the target to apply all states that implement the roles
+ 6. Reset the salt minion's configuration to use the true master instead of the provisioning station
+
 ## FAQ
 
 * Q: Why 'kevin'?
