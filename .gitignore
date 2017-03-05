@@ -6,5 +6,6 @@ etc/master
 etc/minion
 etc/minion_id
 etc/proxy
+etc/roster
 srv/salt/base/src/distfiles/*z
 srv/salt/base/credentials/[a-z]*
