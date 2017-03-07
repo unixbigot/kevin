@@ -20,5 +20,5 @@ base:
     - match: grain
     - salt.master
     - salt.syndic
-    - salt.provision
+    - salt.provision_master
 

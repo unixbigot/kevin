@@ -6,4 +6,5 @@ essential-packages:
       - xz-utils
       - avahi-daemon
       - avahi-utils
+      - ack-grep
  

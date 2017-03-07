@@ -51,6 +51,13 @@ ip_masquerading:
     - out-interface: {{pillar.salt_provision.public_interface}}
     - jump: MASQUERADE
 
+save_iptables:
+  cmd.run:
+    - name: netfilter save
+    - watch:
+      - iptables: ip_forwarding
+      - iptables: ip_masquerading
+
 /etc/network/hosts-{{pillar.salt_provision.interface}}:
   file.managed:
     - template: jinja

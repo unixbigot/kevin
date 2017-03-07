@@ -1,6 +1,7 @@
 *~
 #*#
 *.dpkg-old
+.out
 etc/grains
 etc/master
 etc/master.d/salt-ssh.conf

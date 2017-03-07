@@ -1,31 +1,30 @@
 include:
   - salt.minion
 
-new_minion_id:
+provision_minion_id:
   file.managed:
     - name: /etc/salt/minion_id
     - contents:
-      - {{pillar.roles[0] + '_' + grains.hwaddr_interfaces.eth0|replace(":","")}}
+      - {{ pillar.roles[0] + '-' + grains.hwaddr_interfaces.eth0 | replace(':','') }}
 
-new_minion_grains:
+provision_minion_grains:
   file.serialize:
     - name: /etc/salt/grains
-    - formatter: yaml
     - user: root
     - group: root
     - mode: 644
+    - formatter: yaml
     - merge_if_exists: true
     - dataset:
-        new_minion: 1
-        roles: 
+      roles:
+        - provision_minion
 {% for role in pillar.roles %}
-          - {{role}}
+        - {{role}}
 {% endfor %}
 
-new_minion_restart:
+provision_minion_restart:
   service.running:
     - name: salt-minion
     - watch:
-      - file: new_minion_id
-      - file: new_minion_grains
-
+      - file: provision_minion_id
+      - file: provision_minion_grains

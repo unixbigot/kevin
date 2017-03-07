@@ -1,13 +1,14 @@
 #!/bin/bash
-if [ "$1" = "" ]
+if [ "`whoami`" != "root" ]
 then
-  echo "usage: $0 role"
+  echo "usage: sudo $0 [role]"
   exit 1
 fi
-
+ROLE="$@"
+[ -n "$ROLE" ] || ROLE=base
 [ -n "$LOG" ] || LOG=warning
 
-banner "Looking for salt minion on target"
+echo "Looking for salt minion on target"
 salt-run -l $LOG manage.up | tee .out
 MINIONS_FOUND="`grep -e '^- ' .out | wc -l`"
 
@@ -17,7 +18,7 @@ then
 else
     rm -f $HOME/.ssh/known_hosts
     echo "Installing salt-minion on target"
-    salt-ssh -l $LOG -i target state.apply salt.new_minion pillar="{\"salt_minion\": {\"master_host\": \"192.168.0.1\"}, \"roles\": $ROLE}" | tee .out
+    salt-ssh -l $LOG -i target state.apply salt.provision_minion pillar="{\"salt_minion\": {\"master_host\": \"192.168.99.1\"}, \"roles\": $ROLE}" | tee .out
     if grep 'Failed: *0' .out >/dev/null
     then
       echo "INFO: target was updated with salt-minion"
@@ -41,7 +42,7 @@ fi
 
 echo "Applying states to new minion"
 
-salt -l $LOG -G 'new_minion:1' state.apply | tee .out
+salt -l $LOG -G 'roles:provision_minion' state.apply | tee .out
 if grep '# of minions with errors:.* 0' .out >/dev/null && grep '# of minions that did not return:.* 0' .out >/dev/null
 then
   echo "INFO: target was updated with desired states"
@@ -51,5 +52,5 @@ else
 fi
 
 echo "Erasing provisioning diversions on minion"
-salt -G 'new_minion:1' state.apply salt.new_minion_reset
+salt -G 'rols:provision_minion' state.apply salt.provision_reset
 
