@@ -44,11 +44,11 @@ salt_provision:
   ssh_public_key: salt://credentials/id_provision.pub
   git_secret_key: salt://credentials/id_github
   git_public_key: salt://credentials/id_github.pub
-  address:       192.168.0.1
+  address:       192.168.99.1
   netmask:       255.255.255.0
-  dhcp_start:    192.168.0.100
-  dhcp_end:      192.168.0.100
+  dhcp_start:    192.168.99.100
+  dhcp_end:      192.168.99.100
   dhcp_lease:    5m
-  target:        192.168.0.100
+  target:        192.168.99.100
 
   

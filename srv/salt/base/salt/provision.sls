@@ -3,6 +3,7 @@ dnsmasq:
     - pkgs:
       - dnsmasq
       - iptables
+      - iptables-persistent
   service.running:
     - enable: True
     - listen:
