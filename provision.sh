@@ -1,6 +1,7 @@
 #!/bin/bash
 if [ "`whoami`" != "root" ]
 then
+  echo "Must be run as root"
   echo "usage: sudo $0 [role]"
   exit 1
 fi
@@ -51,6 +52,8 @@ else
   exit 1
 fi
 
+echo "ERASE step skipped"
+exit 0
 echo "Erasing provisioning diversions on minion"
 salt -G 'rols:provision_minion' state.apply salt.provision_reset
 
