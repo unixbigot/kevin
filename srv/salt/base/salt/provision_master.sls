@@ -53,7 +53,7 @@ ip_masquerading:
 
 save_iptables:
   cmd.run:
-    - name: netfilter save
+    - name: netfilter-persistent save
     - watch:
       - iptables: ip_forwarding
       - iptables: ip_masquerading
@@ -91,9 +91,10 @@ ssh_config:
     - group: {{pillar.salt_provision.user}}
     - mode: 600
     - makedirs: True
+    - template: Jinja
     - contents:
       - Host: target
-      - "  User: {{pillar.salt_provision.target_user}}"
+      -    User: {{pillar.salt_provision.target_user}}
 
 provision_ssh_id:
   file.managed:
