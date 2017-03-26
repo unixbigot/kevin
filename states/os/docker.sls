@@ -4,6 +4,7 @@ docker-dependencies:
       - ca-certificates
       - apt-transport-https
       - python-apt
+      - python-setuptools
       - python-pip
 
 remove-fossil-docker:
