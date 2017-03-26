@@ -6,21 +6,35 @@ docker-dependencies:
       - python-apt
       - python-pip
 
+remove-fossil-docker:
+  pkg.removed:
+    - pkgs:
+      - docker-engine
+      - docker.io
+
+# Raspbian breaks the regular pattern of distro/codename assumed by download.docker.com
+{% if grains.os == 'Raspbian' %}
+{%   set dist='debian' %}
+{% else %}
+{%   set dist=grains.os|lower %}
+{% endif %}
+{% set rel=grains.oscodename %}
+
 docker-ce:
   pkgrepo.managed:
-    - humanname: Docker Community Editition
-    - name: deb [arch={{grains.osarch}}] https://download.docker.com/linux/ubuntu {{grains.lsb_distrib_codename}} stable
-    - key_url: https://download.docker.com/linux/ubuntu/gpg
+    - humanname: Docker Community Edition
+    - name: deb [arch={{grains.osarch}}] https://download.docker.com/linux/{{dist}} {{rel}} stable
+    - key_url: https://download.docker.com/linux/{{dist}}/gpg
   pkg.installed: []
 
-docker-compose:
+docker-tools:
   pip.installed:
     - pkgs:
       - docker-compose
       - docker-py
 
-
-{% if grains.osarch == 'armhf' %}
+{% if grains.os == 'Raspbian' %}
+# If you're using a Pi, allow the 'pi' user to run docker
 docker-perms:
   group.present:
     - name: docker
