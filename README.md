@@ -47,7 +47,7 @@ cd kevin
 cp etc/roster.example etc/roster
 vi etc/roster # (or use nano) - add your host, say 'alice'
 ./salt-ssh alice state.apply salt.master
-rsync -av srv/ alice:/srv
+ssh alice git clone https://github.com/unixbigot/kevin.git /srv/salt/base
 ```
 
 ### Installing salt minion on an existing system
