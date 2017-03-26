@@ -26,10 +26,13 @@ nodered-user:
     - gid_from_name: true
     - home: /home/nodered
     - shell: /bin/bash
+
+/lib/systemd/system/nodered.service:
+  file.absent: []
   
 iot-nodered-service:
   file.managed:
-    - name: /lib/systemd/system/nodered.service
+    - name: /etc/systemd/system/nodered.service
     - source: salt://iot/nodered.service
   cmd.run:
     - name: systemctl daemon-reload

@@ -1,0 +1,24 @@
+# systemd service file to start Homebridge
+
+[Unit]
+Description=Homebridge Gateway for presenting legacy devices to apple HomeKit
+Wants=network.target
+Documentation=https://github.com/nfarina/homebridge
+
+[Service]
+Type=simple
+
+User=homebridge
+Group=homebridge
+WorkingDirectory=/home/homebridge
+
+Nice=5
+
+Environment=
+ExecStart=/usr/bin/env homebridge
+KillSignal=SIGINT
+Restart=on-failure
+SyslogIdentifier=homebridge
+
+[Install]
+WantedBy=multi-user.target
