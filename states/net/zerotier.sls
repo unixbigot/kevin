@@ -6,9 +6,13 @@ zerotier-one:
     - file: /etc/apt/sources.list.d/zerotier.list
   pkg:
     - installed
+    - require:
+      - pkgrepo: zerotier-one
   cmd.run:
     - name: zerotier-cli join {{pillar.zerotier.network}}
     - unless: zerotier-cli listnetworks | grep {{pillar.zerotier.network}}
+    - require:
+      - pkg: zerotier-one
       
 
 
