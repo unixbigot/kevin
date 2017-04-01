@@ -11,6 +11,6 @@ etc/proxy
 etc/roster
 etc/salt
 log
-srv/salt/base/src/distfiles/*z
-srv/salt/base/credentials/[a-z]*
+states/src/distfiles/*z
+states/credentials/[a-z]*
 var

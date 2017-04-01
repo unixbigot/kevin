@@ -4,6 +4,10 @@ pkg-depends:
   cmd.run:
     - name: apt install -y python-apt
     - unless: dpkg -l | grep "python-apt "
+  pkg.installed:
+    - pkgs:
+      - ca-certificates
+      - apt-transport-https
 
 # 
 # Install and configure the salt "minion" service
@@ -15,8 +19,9 @@ salt-minion:
     - dist: {{pillar.salt_minion.dist_codename}}
     - key_url: {{pillar.salt_minion.apt_repo_path}}/SALTSTACK-GPG-KEY.pub
     - file: /etc/apt/sources.list.d/saltstack.list
-  pkg:
-    - installed
+    - require:
+      - pkg: pkg-depends
+  pkg.installed:
     - require:
       - pkgrepo: salt-minion
   file.managed:
@@ -24,6 +29,7 @@ salt-minion:
     - replace: False
     - contents:
       - hash_type: sha256
+      - master: {{pillar.salt_minion.master_host}}
   service.running:
     - enable: True
     - watch:
