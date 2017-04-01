@@ -10,8 +10,10 @@ base:
     - match: grain
     - dev.nodejs
     - iot.nodered
-  serendipity:
-    - dev.golang
+  roles:homebridge:
+    - match: grain
+    - dev.nodejs
+    - iot.homebridge
   roles:developer:
     - match: grain
     - dev.golang
