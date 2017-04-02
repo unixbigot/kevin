@@ -1,29 +1,13 @@
-pkg-depends:
-  # Armbian ships without python-apt, which cannot 
-  # be installed with salt's pkg module, which needs it.
-  cmd.run:
-    - name: apt install -y python-apt
-    - unless: dpkg -l | grep "python-apt "
-  pkg.installed:
-    - pkgs:
-      - ca-certificates
-      - apt-transport-https
-
+include:
+  - salt.depends
+ 
 # 
 # Install and configure the salt "minion" service
 #
 salt-minion:
-  pkgrepo.managed:
-    - humanname: SaltStack Repo
-    - name: deb {{pillar.salt_minion.apt_repo_path}} {{pillar.salt_minion.dist_codename}} main
-    - dist: {{pillar.salt_minion.dist_codename}}
-    - key_url: {{pillar.salt_minion.apt_repo_path}}/SALTSTACK-GPG-KEY.pub
-    - file: /etc/apt/sources.list.d/saltstack.list
-    - require:
-      - pkg: pkg-depends
   pkg.installed:
     - require:
-      - pkgrepo: salt-minion
+      - pkgrepo: salt-depends
   file.managed:
     - name: /etc/salt/minion.d/local.conf
     - replace: False
@@ -42,4 +26,4 @@ salt-grains:
     - contents:
       - roles: []
 
-  
+ 

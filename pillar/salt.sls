@@ -40,6 +40,7 @@ salt_provision:
   public_interface: wlan0
 {% endif %}
   repo: https://github.com/unixbigot/kevin.git
+  branch: local_provision
   ssh_secret_key: salt://credentials/id_provision
   ssh_public_key: salt://credentials/id_provision.pub
   git_secret_key: salt://credentials/id_github

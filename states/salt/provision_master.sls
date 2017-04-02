@@ -1,3 +1,6 @@
+include:
+  - salt.master
+
 dnsmasq:
   pkg.installed:
     - pkgs:
@@ -24,7 +27,6 @@ parse-interfaces-dir:
 /etc/network/interfaces.d/{{pillar.salt_provision.interface}}:
   file.managed:
     - makedirs: True
-    - template: jinja
     - contents:
       - allow-hotplug {{pillar.salt_provision.interface}}
       - iface {{pillar.salt_provision.interface}} inet static
@@ -60,14 +62,12 @@ save_iptables:
 
 /etc/network/hosts-{{pillar.salt_provision.interface}}:
   file.managed:
-    - template: jinja
     - contents:
       - {{pillar.salt_provision.address}} salt
       - {{pillar.salt_provision.target}} target
 
 /etc/dnsmasq.d/{{pillar.salt_provision.interface}}:
   file.managed:
-    - template: jinja
     - contents:
       - interface={{pillar.salt_provision.interface}}
       - dhcp-range={{pillar.salt_provision.dhcp_start}},{{pillar.salt_provision.dhcp_end}},{{pillar.salt_provision.dhcp_lease}}
@@ -91,7 +91,6 @@ ssh_config:
     - group: {{pillar.salt_provision.user}}
     - mode: 600
     - makedirs: True
-    - template: Jinja
     - contents:
       - Host: target
       -    User: {{pillar.salt_provision.target_user}}
@@ -117,21 +116,22 @@ provision_ssh_pub:
 salt_provision_repo:
   git.latest:
     - name: {{pillar.salt_provision.repo}}
-    - target: /home/{{pillar.salt_provision.user}}/salt
+    - branch: local_provision
+    - target: /home/{{pillar.salt_provision.user}}/salt/base
     - user: {{pillar.salt_provision.user}}
     #- identity: {{pillar.salt_provision.git_secret_key}}
     - submodules: True
 
-salt_provision_remove_srv:
-  file.absent:
-    - name: /srv
+/srv/salt:
+  file.directory:
+    - makedirs: True
 
 salt_provision_symlink:
   file.symlink:
-    - name: /srv
-    - target: /home/{{pillar.salt_provision.user}}/salt/srv
+    - name: /srv/salt/base
+    - target: /home/{{pillar.salt_provision.user}}/salt/base
     - require:
-      - salt_provision_remove_srv
+      - file: /srv/salt
 
 salt_provision_conf:
   file.managed:
@@ -141,6 +141,8 @@ salt_provision_conf:
     - mode: 644
     - contents:
       - auto_accept: True
+    - require:
+      - pkg: salt-master
 
 salt_provision_restart:
   service.running:

@@ -6,5 +6,6 @@ essential-packages:
       - xz-utils
       - avahi-daemon
       - avahi-utils
+      - libnss-mdns
       - ack-grep
  
