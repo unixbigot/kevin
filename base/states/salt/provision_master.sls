@@ -129,7 +129,7 @@ salt_provision_repo:
 salt_provision_symlink:
   file.symlink:
     - name: /srv/salt/base
-    - target: /home/{{pillar.salt_provision.user}}/salt/base
+    - target: /home/{{pillar.salt_provision.user}}/salt/base/base
     - require:
       - file: /srv/salt
 
