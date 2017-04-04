@@ -1,5 +1,6 @@
 include:
   - salt.master
+  - salt.syndic
 
 dnsmasq:
   pkg.installed:

@@ -20,7 +20,5 @@ base:
     - dev.nodejs
   roles:provisioning:
     - match: grain
-    - salt.master
-    - salt.syndic
     - salt.provision_master
 
