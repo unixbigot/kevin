@@ -20,7 +20,7 @@ salt_syndic:
 salt_minion:
   master_host: salt.lan
 {% if grains['os'] == 'Ubuntu' and grains['osarch'] == 'amd64' %}
-  apt_repo_path: http://repo.saltstack.com/apt/ubuntu/16.04/amd64/latest
+  apt_repo_path: https://repo.saltstack.com/apt/ubuntu/16.04/amd64/latest
   dist_codename: xenial
 {% elif grains['os_family'] == 'Debian' and grains['osarch'] == 'armhf' %}
   apt_repo_path: https://repo.saltstack.com/apt/debian/8/armhf/latest
