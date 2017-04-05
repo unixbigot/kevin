@@ -114,25 +114,14 @@ provision_ssh_pub:
     - makedirs: True
     - source: {{pillar.salt_provision.ssh_public_key}}
 
-salt_provision_repo:
-  git.latest:
-    - name: {{pillar.salt_provision.repo}}
-    - branch: local_provision
-    - target: /home/{{pillar.salt_provision.user}}/salt/base
-    - user: {{pillar.salt_provision.user}}
-    #- identity: {{pillar.salt_provision.git_secret_key}}
-    - submodules: True
 
-/srv/salt:
-  file.directory:
-    - makedirs: True
-
-salt_provision_symlink:
-  file.symlink:
-    - name: /srv/salt/base
-    - target: /home/{{pillar.salt_provision.user}}/salt/base/base
-    - require:
-      - file: /srv/salt
+/home/{{pillar.salt_provision.user}}/salt:
+  file:
+    - directory:
+      - makedirs: True
+    - symlink:
+      - name: /home/{{pillar.salt_provision.user}}/salt/base
+      - target: /srv/salt/base
 
 salt_provision_conf:
   file.managed:

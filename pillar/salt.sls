@@ -27,6 +27,12 @@ salt_minion:
   dist_codename: jessie
 {%endif%}
 
+salt_master:
+  repo: https://github.com/unixbigot/kevin.git
+  branch: local_provision
+  git_secret_key: salt://credentials/id_github
+  git_public_key: salt://credentials/id_github.pub
+  
 #
 # Set up provisining server config
 #
@@ -39,12 +45,8 @@ salt_provision:
 {% else %}
   public_interface: wlan0
 {% endif %}
-  repo: https://github.com/unixbigot/kevin.git
-  branch: local_provision
   ssh_secret_key: salt://credentials/id_provision
   ssh_public_key: salt://credentials/id_provision.pub
-  git_secret_key: salt://credentials/id_github
-  git_public_key: salt://credentials/id_github.pub
   address:       192.168.99.1
   netmask:       255.255.255.0
   dhcp_start:    192.168.99.100
