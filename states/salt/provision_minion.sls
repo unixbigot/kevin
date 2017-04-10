@@ -10,17 +10,17 @@ provision_minion_id:
 provision_minion_grains:
   file.serialize:
     - name: /etc/salt/grains
-    - user: root
-    - group: root
-    - mode: 644
-    - formatter: yaml
-    - merge_if_exists: true
     - dataset:
       roles:
         - provision_minion
 {% for role in pillar.roles %}
         - {{role}}
 {% endfor %}
+    - user: root
+    - group: root
+    - mode: 644
+    - formatter: yaml
+    - merge_if_exists: true
 
 provision_minion_restart:
   service.running:

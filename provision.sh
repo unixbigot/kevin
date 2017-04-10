@@ -19,7 +19,7 @@ then
 else
     rm -f $HOME/.ssh/known_hosts
     echo "Installing salt-minion on target"
-    salt-ssh -l $LOG -i target state.apply salt.provision_minion pillar="{\"salt_minion\": {\"master_host\": \"192.168.99.1\"}, \"roles\": $ROLE}" | tee .out
+    ./salt-ssh -l $LOG -i target state.apply salt.provision_minion pillar="{\"salt_minion\": {\"master_host\": \"192.168.99.1\"}, \"roles\": [$ROLE]}" | tee .out
     if grep 'Failed: *0' .out >/dev/null
     then
       echo "INFO: target was updated with salt-minion"

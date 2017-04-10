@@ -12,9 +12,9 @@ salt-syndic:
   file.managed:
     - name: /etc/salt/master.d/syndic.conf
     - replace: False
-    - contents:
-      - syndic_master: {{pillar.salt_syndic.master_host}}
-      - worker_threads: 3
+    - contents: |
+      syndic_master: {{pillar.salt_syndic.master_host}}
+      worker_threads: 3
   service.running:
     - enable: True
     - watch:
