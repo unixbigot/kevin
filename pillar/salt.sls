@@ -32,7 +32,7 @@ salt_master:
   branch: local_provision
   git_secret_key: salt://credentials/id_github
   git_public_key: salt://credentials/id_github.pub
-  
+
 #
 # Set up provisining server config
 #
@@ -53,5 +53,3 @@ salt_provision:
   dhcp_end:      192.168.99.100
   dhcp_lease:    5m
   target:        192.168.99.100
-
-  

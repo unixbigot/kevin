@@ -115,13 +115,11 @@ provision_ssh_pub:
     - source: {{pillar.salt_provision.ssh_public_key}}
 
 
-/home/{{pillar.salt_provision.user}}/salt:
-  file:
-    - directory:
-      - makedirs: True
-    - symlink:
+salt_provision_symlink:
+   file.symlink:
       - name: /home/{{pillar.salt_provision.user}}/salt/base
       - target: /srv/salt/base
+      - makedirs: True
 
 salt_provision_conf:
   file.managed:

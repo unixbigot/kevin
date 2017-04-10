@@ -56,4 +56,3 @@ echo "ERASE step skipped"
 exit 0
 echo "Erasing provisioning diversions on minion"
 salt $ARGS -G 'rols:provision_minion' state.apply salt.provision_reset
-
