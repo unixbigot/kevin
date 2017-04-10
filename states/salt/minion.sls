@@ -11,14 +11,15 @@ salt-minion:
   file.managed:
     - name: /etc/salt/minion.d/local.conf
     - replace: False
-    - contents:
-      - hash_type: sha256
-      - master: {{pillar.salt_minion.master_host}}
+    - contents: |
+        hash_type: sha256
+        master: {{pillar.salt_minion.master_host}}
   service.running:
     - enable: True
     - watch:
       - file: salt-grains
       - file: salt-minion
+
 salt-grains:
   file.managed:
     - name: /etc/salt/grains
