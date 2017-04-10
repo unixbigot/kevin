@@ -29,7 +29,6 @@ salt_minion:
 
 salt_master:
   repo: https://github.com/unixbigot/kevin.git
-  branch: local_provision
   git_secret_key: salt://credentials/id_github
   git_public_key: salt://credentials/id_github.pub
 
