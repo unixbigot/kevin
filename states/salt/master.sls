@@ -30,6 +30,6 @@ salt-base-repo:
     - name: {{pillar.salt_master.repo}}
     - branch: {{pillar.salt_master.branch}}
     - target: /srv/salt/base
-    - identity: {{pillar.salt_master.git_secret_key}}
+
 
   

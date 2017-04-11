@@ -29,8 +29,7 @@ salt_minion:
 
 salt_master:
   repo: https://github.com/unixbigot/kevin.git
-  git_secret_key: salt://credentials/id_github
-  git_public_key: salt://credentials/id_github.pub
+  branch: master
 
 #
 # Set up provisining server config
