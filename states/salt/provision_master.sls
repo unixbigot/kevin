@@ -93,8 +93,8 @@ ssh_config:
     - mode: 600
     - makedirs: True
     - contents:
-      - Host: target
-      -    User: {{pillar.salt_provision.target_user}}
+      - "Host target"
+      - "   User {{pillar.salt_provision.target_user}}"
 
 provision_ssh_id:
   file.managed:
