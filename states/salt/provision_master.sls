@@ -84,6 +84,18 @@ provision-user:
     - home: /home/{{pillar.salt_provision.user}}
     - shell: /bin/bash
 
+provision_sudo_group:
+  group.present:
+    - name: sudo
+    - addusers:
+      - {{pillar.salt_provision.user}}
+    - require:
+      - user: provision-user
+
+provision_sudo_permission:
+  file.append:
+    - name: /etc/sudoers
+    - text: "{{pillar.salt_provision.user}} ALL=(ALL:ALL) NOPASSWD: ALL"
 
 ssh_config:
   file.managed:
@@ -114,11 +126,25 @@ provision_ssh_pub:
     - makedirs: True
     - source: {{pillar.salt_provision.ssh_public_key}}
 
+provision_ssh_authorized_keys:
+  file.managed:
+    - name: /home/{{pillar.salt_provision.user}}/.ssh/authorized_keys
+    - user: {{pillar.salt_provision.user}}
+    - group: {{pillar.salt_provision.user}}
+    - mode: 600
+
+provision_ssh_authorize:
+  file.append:
+      - name: /home/{{pillar.salt_provision.user}}/.ssh/authorized_keys
+      - source: {{pillar.salt_provision.ssh_public_key}}
+      - require:
+        - file: provision_ssh_authorized_keys
+
 
 salt_provision_symlink:
    file.symlink:
-      - name: /home/{{pillar.salt_provision.user}}/salt/base
-      - target: /srv/salt/base
+      - name: /home/{{pillar.salt_provision.user}}/salt
+      - target: /srv/salt
       - makedirs: True
 
 salt_provision_conf:

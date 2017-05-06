@@ -25,6 +25,6 @@ salt-grains:
     - name: /etc/salt/grains
     - replace: False
     - contents:
-      - roles: []
-
+      - "roles:"
+      - "  - base"
  
