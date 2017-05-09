@@ -31,7 +31,7 @@ else
     while :
     do
       echo "Waiting for new minion to connect"
-      salt-run $ARGS manage.up | tee .out
+      salt-run manage.up | tee .out
       MINIONS_FOUND="`grep -e '^- ' .out | wc -l`"
       if [ "$MINIONS_FOUND" -ge 1 ]
       then
