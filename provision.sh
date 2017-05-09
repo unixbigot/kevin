@@ -6,7 +6,7 @@ ROLE="$@"
 [ -n "$TARGET" ] || TARGET=target
 [ -n "$MASTER" ] || MASTER=192.168.99.1
 
-ARGS="--config-dir etc --force-color -l $LOG"
+ARGS="-l $LOG"
 
 echo "Looking for connected salt minion on $TARGET"
 # Note this will spew an error if the master has zero known minions
@@ -55,4 +55,4 @@ fi
 echo "ERASE step skipped"
 exit 0
 echo "Erasing provisioning diversions on minion"
-salt $ARGS -G 'rols:provision_minion' state.apply salt.provision_reset
+salt $ARGS -G 'roles:provision_minion' state.apply salt.provision_reset
