@@ -11,6 +11,6 @@ versions:
   golang: 1.7.5.linux-armv6l
 {% else %}
   arduino: 1.8.1-linux64
-  nodejs_version: v6.9.5-linux-amd64
+  nodejs: v6.9.5-linux-x64
   golang: 1.7.5.linux-amd64
 {% endif %}
