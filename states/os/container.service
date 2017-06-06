@@ -1,0 +1,17 @@
+[Unit]
+Description={{description}}
+Requires=docker.service
+{% if after is defined %}
+After={{after}}
+{% else %}
+After=docker.service
+{% endif %}
+
+[Service]
+Restart=always
+RestartSec=5
+ExecStart=/usr/bin/docker start -a {{container}}
+ExecStop=/usr/bin/docker  stop  -t2 {{container}}
+
+[Install]
+WantedBy=multi-user.target
