@@ -16,6 +16,8 @@ terrapin:
   user: alice
   passwd: your-actual-password-goes-here
   sudo: True
-  
-
+river:
+  host: 52.64.52.35
+  user: ubuntu
+  sudo: True
 
