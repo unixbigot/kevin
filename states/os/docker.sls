@@ -47,3 +47,10 @@ docker-perms:
     - require:
       - pkg: docker-ce
 {% endif %}
+
+docker-env:
+  file.managed:
+    - name: /etc/profile.d/docker.sh
+    - mode: 755
+    - contents:
+      - "export PYTHONPATH=/usr/local/lib/python2.7/dist-packages:/usr/lib/python2.7/dist-packages"
