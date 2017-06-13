@@ -20,10 +20,7 @@ hostapd-installed:
     - source: salt://net/hostapd.conf
     - template: jinja
     - context:
-      interface: {{pillar.hostap.interface}}
-      country: {{pillar.hostap.country}}
-      ssid: {{pillar.hostap.ssid}}
-      channel: {{pillar.hostap.channel}}
+      config: {{pillar.hostap}}
 
 /etc/default/hostapd:
   file.managed:
@@ -72,6 +69,7 @@ hostapd-running:
 
 dnsmasq-running:
   service.running:
+    - name: dnsmasq
     - enable: True
     - watch:
       - file: /etc/dnsmasq.d/{{pillar.hostap.interface}}
