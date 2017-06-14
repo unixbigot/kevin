@@ -41,7 +41,7 @@ hostapd-installed:
     - context:
       address: {{pillar.hostap.address}}
 
-/etc/dnsmasq.d/{{pillar.hostap.interface}}:
+/etc/dnsmasq.d/{{pillar.hostap.interface}}.conf:
   file.managed:
     - source: salt://net/dnsmasq.conf
     - template: jinja
