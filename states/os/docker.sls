@@ -31,7 +31,7 @@ docker-ce:
 docker-tools:
   cmd.run:
     - name: pip install --upgrade pip
-    - unless: test -f /usr/local/bin/pip
+    - unless: test -f /usr/local/bin/pip || test -f /usr/bin/pip
   pip.installed:
     - pkgs:
       - docker-compose
