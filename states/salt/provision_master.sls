@@ -15,8 +15,9 @@ dnsmasq:
       - file: /etc/dnsmasq.d/{{pillar.salt_provision.interface}}
 
 /etc/network/interfaces:
-  file.comment:
-    - regex: ^(iface|allow-hotplug|no-auto-down) {{pillar.salt_provision.interface}}
+  file.replace:
+    - pattern: "^(iface|allow-hotplug|no-auto-down) {{pillar.salt_provision.interface}}.*"
+    - repl: ""
 
 parse-interfaces-dir:
   file.append:
