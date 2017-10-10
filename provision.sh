@@ -1,10 +1,22 @@
 #!/bin/bash
-#set -x
-ROLE="$@"
-[ -n "$ROLE" ] || ROLE=base
-[ -n "$LOG" ] || LOG=warning
-[ -n "$TARGET" ] || TARGET=target
-[ -n "$MASTER" ] || MASTER=192.168.99.1
+
+ROLE=base
+LOG=warning
+TARGET=target
+MASTER=192.168.99.1
+
+while getopts 'r:l:t:m:' flag; do
+  case "${flag}" in
+    r) ROLE="${OPTARG}" ;;
+    l) LOG="${OPTARG}" ;;
+    t) TARGET="${OPTARG}" ;;
+    m) MASTER="${OPTARG}"  ;;
+    *) error "Unexpected option ${flag}" ;;
+  esac
+done
+
+echo "role: $ROLE, log level: $LOG, target: $TARGET, master: $MASTER"
+
 
 ARGS="-l $LOG"
 
