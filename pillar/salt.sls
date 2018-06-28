@@ -25,6 +25,9 @@ salt_minion:
 {% elif grains['os_family'] == 'Debian' and grains['osarch'] == 'armhf' %}
   apt_repo_path: https://repo.saltstack.com/apt/debian/8/armhf/latest
   dist_codename: jessie
+{% elif grains['os_family'] == 'Debian' and grains['osarch'] == 'arm64' %}
+  apt_repo_path: https://repo.saltstack.com/apt/debian/9/armhf/latest
+  dist_codename: stretch
 {%endif%}
 
 salt_master:
