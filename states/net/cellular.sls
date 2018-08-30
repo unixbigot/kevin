@@ -1,0 +1,3 @@
+wvdial:
+  pkg.installed
+
