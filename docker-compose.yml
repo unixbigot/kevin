@@ -1,0 +1,20 @@
+#
+#  Run a simulated salt master and minion
+#
+version: "3"
+services:
+  salt:
+    build:
+      dockerfile: testrig/Dockerfile-salt
+      context: .
+    ports:
+      - "4505:4505"
+      - "4506:4506"
+  minion:
+    build:
+      dockerfile: testrig/Dockerfile-minion
+      context: .
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    links:
+      - salt

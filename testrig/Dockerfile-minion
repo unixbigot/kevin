@@ -1,0 +1,12 @@
+#
+# Simulated salt minion
+#
+FROM ubuntu:bionic
+RUN apt-get update && apt-get install -y apt-transport-https wget gnupg python-apt
+RUN wget -O - https://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest/SALTSTACK-GPG-KEY.pub | apt-key add -
+ADD testrig/salt.list /etc/apt/sources.d/docker.list
+RUN apt-get update && apt-get -y install salt-minion
+RUN echo "minion01" >/etc/salt/minion_id
+CMD ["/usr/bin/salt-minion"]
+
+

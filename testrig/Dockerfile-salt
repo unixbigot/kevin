@@ -1,0 +1,17 @@
+#
+# Simulated salt master
+#
+FROM ubuntu:bionic
+RUN apt-get update && apt-get install -y apt-transport-https wget gnupg python-apt
+RUN wget -O - https://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest/SALTSTACK-GPG-KEY.pub | apt-key add -
+ADD testrig/salt.list /etc/apt/sources.d/docker.list
+RUN apt-get update && apt-get -y install salt-master salt-ssh
+RUN mkdir -p /srv/salt/base
+ADD ./etc/master.d /etc/salt/master.d
+ADD ./testrig/environments.conf /etc/salt/master.d
+ADD ./states /srv/salt/base/states
+ADD ./pillar /srv/salt/base/pillar
+ADD ./Saltfile /srv/salt/base
+ADD provision.sh /srv/salt/base
+ADD salt-ssh /srv/salt/base
+CMD ["/usr/bin/salt-master"]
