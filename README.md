@@ -109,30 +109,7 @@ This will do the following:
  5. Run a "highstate" operation on the target to apply all states that implement the roles
  6. Reset the salt minion's configuration to use the true master instead of the provisioning station
 
-## Development
-
-You can do some testing with docker containers.  
-
-```
-  $ docker compose up --build
-```
-
-This will give you two containers, a master and minion.  You can get
-shell on master with `testrig/master.sh` and minion with
-`testrig/minion.sh`.
-
-To wipe and rebuild do this
-
-```
-  # kill your running docker by ^C if foreground or...
-  $ docker-compose stop
-  # then destroy the containers if you want to go back to a clean slate
-  $ docker-compose down
-```
-
-
 ## FAQ
 
 * Q: Why 'kevin'?
   * A: https://www.youtube.com/watch?v=I3Rw8b90INk
-

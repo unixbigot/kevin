@@ -6,8 +6,12 @@ include:
 #
 salt-minion:
   pkg.installed:
+{%if grains.osarch=="arm64" and grains.os=="Ubuntu" %}
+    - name: salt-minion
+{%else%}
     - require:
       - pkgrepo: salt-depends
+{%endif%}
   file.managed:
     - name: /etc/salt/minion.d/local.conf
     - replace: False

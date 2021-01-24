@@ -1,0 +1,68 @@
+#!/usr/bin/perl
+
+use Modern::Perl;
+use JSON;
+use Data::Dumper;
+use Test::Deep;
+$|=1;
+
+my %fun;
+my $pipe;
+open ($pipe, "salt-run state.event |") or die "Can't start salt event stream";
+
+while (<$pipe>) {
+    chomp;
+    #say;
+    my $eventtxt;
+    ($_, $eventtxt) = split(/\s+/, $_, 2);
+    my $event = decode_json($eventtxt);
+#    say Dumper($event);
+
+    next if m|^salt/beacon|;
+    next if m|^salt/presence/present$|;
+    next if m|^salt/job/[0-9]+/new$|;
+    ##next if defined $$event{minions};
+    #next if defined $$event{present};
+    next if $event->{'Minion data cache refresh'};
+    next if ($event->{'cmd'} and $event->{'cmd'} eq '_return');
+    #next if m|^salt/minion/.*/start$|;
+    next if ($event->{'fun'} and $event->{'fun'} eq 'saltutil.find_job');
+    next if Test::Deep::eq_deeply([sort keys %$event],[qw(_stamp minions)]);
+
+    if ($_ =~ '^(minion|syndic)_start') {
+	say sprintf("%-8s %s", 'START', $event->{'data'});
+    }
+    elsif ($event->{'cmd'} and $event->{'cmd'} eq '_minion_event') {
+	say "WTF $_ <= ".Dumper($event) unless ref $event->{'data'};
+	my $ret = $event->{'data'}->{'ret'};
+	my $result = $ret->{'result'}?"OK":"FAIL";
+	my $sls = $ret->{'__sls__'} // 'WTF';
+	my $name = $ret->{'name'} // 'WTF';
+	my $id = $ret->{'__id__'};
+	my $comment = $ret->{comment};
+	my $indent = ' ' x 16;
+	$comment =~ s/^/\n$indent/;
+	$comment =~ s/\n/\n$indent/g;
+	say sprintf("%-10s%s.sls:%s%s", $result, $sls, $id, $comment) if $id;
+	#say Dumper($event);
+    }
+    elsif (m|salt/run/.*/new$|) {
+	say sprintf "%-10s%s => %s", 'RUNNER', $event->{'user'}, $event->{fun}
+    }
+    elsif (m|salt/run/.*/ret$|) {
+	  local $Data::Dumper::Terse=1;
+	  local $Data::Dumper::Indent=0;
+	  say sprintf "%-10s%s <= %s = %s", 'RUNNER', $event->{'user'}, $event->{fun}, Dumper($event->{'return'})
+    }
+    elsif (/salt.presence.change/) {
+	say "NEW MINION $_" for @{$event->{'new'}};
+	say "DED MINION $_" for @{$event->{'lost'}};
+    }
+    elsif ($_ eq 'salt/auth') {
+	my $id = $event->{id};
+	say "AUTH       $id";
+    }
+    else {
+	say "What do we do with $_ ".Dumper($event);
+    }
+}

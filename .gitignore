@@ -11,6 +11,8 @@ etc/proxy
 etc/roster
 etc/salt
 log
-base/states/src/distfiles/*z
-base/states/credentials/[a-z]*
+states/src/distfiles/*z
+states/src/distfiles/checksums.txt
+states/credentials/[a-z]*
 var
+states/src/firmware/animaltrap

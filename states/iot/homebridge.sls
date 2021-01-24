@@ -12,7 +12,7 @@ homebridge:
     - env:
       - npm_config_unsafe_perm: "true"
   file.managed:
-    - name: /lib/systemd/system/homebridge.service
+    - name: /etc/systemd/system/homebridge.service
     - source: salt://iot/homebridge.service
   cmd.run:
     - name: systemctl daemon-reload
@@ -33,6 +33,7 @@ homebridge-config:
     - template: jinja
     - context:
       bridge: {{pillar.homebridge.bridge}}
+      username: {{pillar.homebridge.username}}
       pin: {{pillar.homebridge.pin}}
       desc: {{pillar.homebridge.desc}}
 
@@ -40,6 +41,8 @@ homebridge-plugins:
   npm.installed:
     - require:
       - npm: homebridge
+    - dir: /home/homebridge/.homebridge
+    - user: homebridge
     - pkgs:
 {% for pkg in pillar.homebridge.plugins %}
       - homebridge-{{pkg}}

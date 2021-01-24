@@ -1,0 +1,18 @@
+# systemd service file to connect via LTE Cat M1 using wvdial
+
+[Unit]
+Description=LTE Cat M1 IoT dialout
+Wants=network.target
+
+[Service]
+Type=simple
+
+Nice=5
+
+ExecStart=/usr/bin/wvdial -C /etc/wvdial-m2m.conf
+KillSignal=SIGINT
+Restart=on-failure
+
+
+[Install]
+WantedBy=multi-user.target

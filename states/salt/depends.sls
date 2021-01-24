@@ -1,5 +1,9 @@
-
 salt-depends:
+{%if grains.osarch=="arm64" and grains.os=="Ubuntu" %}
+  # In Ubuntu 20.10 server, system salt package is suitable!
+  test.succeed_without_changes:
+    - name: system-salt-is-suitable
+{%else%}    
   # Armbian ships without python-apt, which cannot 
   # be installed with salt's pkg module, which needs it.
   cmd.run:
@@ -21,4 +25,4 @@ salt-depends:
     - file: /etc/apt/sources.list.d/saltstack.list
     - require:
       - pkg: salt-depends
-      
+{%endif%}    

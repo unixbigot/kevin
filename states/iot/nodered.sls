@@ -5,31 +5,53 @@ nodered-base-install:
       - node-red-admin
     - user: root
 
-nodered-johnny-five:
+nodered-modules-unsafe:
   npm.installed:
     - pkgs:
       - node-red-contrib-gpio
+      - "@abandonware/noble"
     - user: root
     - env:
       - npm_config_unsafe_perm: "true"
 
-nodered-blynk:
+nodered-modules:
   npm.installed:
     - name: node-red-contrib-blynk-websockets
     - user: root
 
+nodejs-permission:
+  cmd.run:
+    - name: setcap cap_net_raw+eip /usr/local/node/bin/node
+
 nodered-user:
-  group.present:
-    - name: nodered
   user.present:
     - name: nodered
-    - gid_from_name: true
     - home: /home/nodered
+    - createhome: True
+    - usergroup: True
+    - groups:
+      - dialout
+      - audio
+      - video
+      - input
+      - i2c
+{% if grains.os == 'Raspbian' %}
+      - spi
+      - gpio
+{% endif %}
     - shell: /bin/bash
 
 /lib/systemd/system/nodered.service:
   file.absent: []
   
+nodered-package:
+  file.managed:
+    - name: /home/nodered/.node-red/package.json
+    - user: nodered
+    - group: nodered
+    - mode: 644
+    - source: salt://iot/nodered-package.json
+
 iot-nodered-service:
   file.managed:
     - name: /etc/systemd/system/nodered.service

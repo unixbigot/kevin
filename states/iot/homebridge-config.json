@@ -1,7 +1,7 @@
 {
     "bridge": {
         "name": "{{bridge}}",
-	"username": "{{username}},
+	"username": "{{username}}",
         "pin": "{{pin}}"
     },
     "description": "{{desc}}",
@@ -12,48 +12,18 @@
 	    "name": "Homebridge Info Server",
 	    "updateFrequency": 10000,
 	    "updateCheckFrequency": 86400
-	},
-	{
-            "platform":"MiLight",
-            "name":"MiLight",
-            "bridges": [
-		{
-                    "ip_address": "10.0.1.25",
-                    "version": "v6",
-                    "lights": {"fullColor": ["Kitchen",null,"Bedroom","Hallway"],
-                               "rgbw": ["Living Room", "Downstairs Bedroom"]},
-                    "repeat": 1,
-                    "delay": 100
-		},
-		{
-                    "ip_address": "10.0.1.26",
-                    "lights": {"white": ["Dining Room", "Den"],
-                               "rgbw": ["Master Bedroom"]}
-		}
-            ]
-        }
-	
+	}
     ],
     "accessories": [
         {
             "accessory": "mqttswitch",
-            "name": "living room floor lamp",
-            "url": "http://192.168.1.21:1883/",
-            "caption": "floor lamp in the living room",
+            "name": "workbench station 1",
+            "url": "http://mqtt.lan:1883/",
+            "caption": "LED lights at workbench station 1",
             "topics": {
-                "statusGet":    "lights/livingroom/lamp1",
-                "statusSet":    "lights/livingroom/lamp1"
+                "statusGet":    "devices/light-controller/light01/status/light",
+                "statusSet":    "devices/light-controller/light01/set/light"
             }
-        }, {
-            "accessory": "TV",
-            "name": "TV",
-            "description": "Damned Television",
-            "ip": "192.168.1.103"
-        }, {
-            "accessory": "mqtt-temperature",
-            "name": "Living Room Temperature",
-            "url": "http://192.168.1.21:1883/",
-            "topic": "sensors/livingroom/temp/ambient"
         }
     ]
 }

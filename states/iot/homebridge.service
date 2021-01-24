@@ -10,12 +10,10 @@ Type=simple
 
 User=homebridge
 Group=homebridge
-WorkingDirectory=/home/homebridge
-
+WorkingDirectory=/home/homebridge/.homebridge
 Nice=5
-
-Environment=
-ExecStart=/usr/bin/env homebridge
+Environment="HOME=/home/homebridge"
+ExecStart=/home/homebridge/.homebridge/node_modules/.bin/homebridge
 KillSignal=SIGINT
 Restart=on-failure
 SyslogIdentifier=homebridge

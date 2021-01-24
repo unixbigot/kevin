@@ -20,11 +20,20 @@ salt_syndic:
 salt_minion:
   master_host: salt.lan
 {% if grains['os'] == 'Ubuntu' and grains['osarch'] == 'amd64' %}
+{# Saltstack only packages for LTS release, so "round" the OS version to the latest LTE #}
+{% if grains['osmajorrelease'] <= 14 %}
+  apt_repo_path: https://repo.saltstack.com/apt/ubuntu/14.04/amd64/latest
+  dist_codename: trusty
+{% elif grains['osmajorrelease'] < 18 %}  
   apt_repo_path: https://repo.saltstack.com/apt/ubuntu/16.04/amd64/latest
   dist_codename: xenial
+{% else %}
+  apt_repo_path: https://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest
+  dist_codename: bionic
+{%endif%}
 {% elif grains['os_family'] == 'Debian' and grains['osarch'] == 'armhf' %}
-  apt_repo_path: https://repo.saltstack.com/apt/debian/8/armhf/latest
-  dist_codename: jessie
+  apt_repo_path: https://repo.saltstack.com/apt/debian/9/armhf/latest
+  dist_codename: stretch
 {% elif grains['os_family'] == 'Debian' and grains['osarch'] == 'arm64' %}
   apt_repo_path: https://repo.saltstack.com/apt/debian/9/armhf/latest
   dist_codename: stretch

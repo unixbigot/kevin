@@ -1,0 +1,13 @@
+{
+    "name": "node-red-project",
+    "description": "A Node-RED Project",
+    "version": "0.0.1",
+    "private": true,
+    "dependencies": {
+        "node-red-contrib-blynk-websockets": "0.0.3",
+        "node-red-contrib-i2c": "~0.7.2",
+        "node-red-contrib-influxdb": "~0.5.0",
+        "node-red-contrib-noble-bluetooth": "^0.9.1",
+        "node-red-dashboard": "~2.24.0"
+    }
+}

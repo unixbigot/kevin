@@ -7,5 +7,5 @@ essential-packages:
       - avahi-daemon
       - avahi-utils
       - libnss-mdns
-      - ack-grep
+      - ack
  

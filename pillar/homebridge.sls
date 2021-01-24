@@ -4,12 +4,12 @@ homebridge:
   username: CC:22:3D:E3:CE:30
   desc: Gateway for Apple Homekit to legacy devices
   plugins:
-    - blynk
+#    - blynk
     - camera-ffmpeg
     - camera-motion
     - contactsensor
     - daylight
-    - hue
+#    - hue
     - info
     - ip-camera
     - milight
@@ -20,7 +20,7 @@ homebridge:
     - mqttlightbulb
     - mqttswitch
     - neopixel
-    - panasonictv
+#    - panasonictv
     - people
     - weather
 

@@ -6,6 +6,7 @@ salt-master:
     - pkgs:
       - salt-master
       - salt-ssh
+      - libtest-deep-perl
     - require:
       - pkgrepo: salt-depends
   file.managed:

@@ -1,0 +1,18 @@
+# systemd service file to start Homebridge
+
+[Unit]
+Description=Video camera streaming service
+Wants=network.target
+Documentation=https://github.com/jacksonliam/mjpg-streamer
+
+[Service]
+Type=simple
+
+WorkingDirectory=/opt/accelerando/mjpg-streamer/mjpg-streamer-experimental
+ExecStart=/opt/accelerando/mjpg-streamer/mjpg-streamer-experimental/mjpg_streamer -i "./input_uvc.so -d /dev/video0 -f 30" -o "./output_http.so -p 80 -w ./www"
+KillSignal=SIGINT
+Restart=on-failure
+SyslogIdentifier=mjpg
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,17 @@
+# systemd service file to start gstreamer live camera
+
+[Unit]
+Description=Video camera live feed service
+Wants=network.target
+
+[Service]
+Type=simple
+
+WorkingDirectory=/home/accelerando
+ExecStart=/usr/local/bin/livecam.sh
+KillSignal=SIGINT
+Restart=on-failure
+SyslogIdentifier=livecam
+
+[Install]
+WantedBy=multi-user.target
