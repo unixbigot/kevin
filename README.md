@@ -39,6 +39,36 @@ SaltStack supports Mac, Linux and Windows.
 
 ## Usage
 
+### Quick start
+
+See subsequent sections below for how to set up a full ecosystem with a master server that
+manages a collection of minions, but maybe your're impatient?
+
+The quick way to leverage this repo is to (ab)use "masterless mode".
+
+This repo defines a selection of "states" which turn Raspberry Pis
+(and other SBCs) into useful machines (look in the states/
+subdirectory for states like dev/zephyr.sls).     A "role" is a collection of
+states.
+
+The fastest way to make use of Kevin is:
+
+  * Install salt-minion using the instructions from
+    https://repo.saltstack.com/
+  * check out the kevin repo into /srv/salt/base
+  * run `cd states/src/distfiles && ./mirror.sh`
+  * apply a state, eg `salt-call --local state.apply dev.zephyr`
+  
+To apply a role (lots of states at once, see `states/top.sls` for
+defined roles) do this:
+
+  * `salt-call --local grains.append roles NAMEOFROLE`
+  * `salt-call --local state.apply`
+
+For example, the 'developer' and 'embedded' roles install a bunch of stuff that
+is otherwise not easily installable via 'apt' (or is laughably
+outdated in the apt repositories).
+
 ### Creating your salt master
 
 ```
