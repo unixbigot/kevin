@@ -1,0 +1,10 @@
+# /etc/chatscripts/chat-disconnect
+ABORT "ERROR"
+ABORT "NO DIALTONE"
+ABORT "NO CARRIER"
+SAY "\nSending break to the modem\n"
+""  +++\d\d\d
+""  +++\d\d\d
+""  +++\d\d\d
+OK  ATH0
+SAY "\nGoodbye\n"

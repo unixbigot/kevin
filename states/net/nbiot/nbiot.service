@@ -1,0 +1,15 @@
+[Unit]
+Description=PPP Auto Connection
+After=network.target
+
+[Service]
+ExecStart=/bin/sh /usr/local/sbin/nbiot.sh
+ExecStop=poff nbiot
+WorkingDirectory=/var/run
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+
+
+[Install]
+WantedBy=multi-user.target
